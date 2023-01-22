@@ -20,7 +20,7 @@
   --Very-Dark-Grayish-Blue: hsl(237, 14%, 26%);
 }
 
-body::before, body::after {
+body {
   margin: 0;
   padding: 0;
   border: 0;
