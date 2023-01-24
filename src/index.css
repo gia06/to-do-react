@@ -1,3 +1,5 @@
+@Import url("https://fonts.google.com/specimen/Josefin+Sans");
+
 :root {
   /* Primary */
   --Bright-Blue: hsl(220, 98%, 61%);
@@ -25,5 +27,6 @@ body {
   padding: 0;
   border: 0;
   box-sizing: border-box;
-  font-family: "Space Mono", monospace
+  font-family: "Josefin Sans", monospace;
+  height: 100vh
 }
