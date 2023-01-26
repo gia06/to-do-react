@@ -4,6 +4,7 @@ import axios from "axios";
 import Background from "./components/Background";
 import Header from "./components/Header";
 import ToDoInput from "./components/ToDoInput";
+import ToDoList from "./components/ToDoList";
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -20,23 +21,26 @@ function App() {
   }, []);
 
   return (
-    <Wrapper>
+    // todo need to change bcg images according to mobile size
+    <AppWrapper isDarkTheme={isDarkTheme}>
       <Background isDarkTheme={isDarkTheme} />
       <Main>
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
-        <ToDoInput />
+        <ToDoInput isDarkTheme={isDarkTheme} />
+        <ToDoList isDarkTheme={isDarkTheme} />
       </Main>
-    </Wrapper>
+    </AppWrapper>
   );
 }
 
 export default App;
 
-const Wrapper = styled.div`
+const AppWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: ${(props) => (props.isDarkTheme ? "#171823" : "#ffffff")};
 `;
 
 const Main = styled.main`
