@@ -22,7 +22,7 @@ function ToDoInput(props) {
         placeholder="Create a new todo..."
         onChange={(e) => setInputValue(e.target.value)}
         isDarkTheme={props.isDarkTheme}
-        // todo will add submitting function here when ready
+        // TODO - needs submitting function here when ready
         onKeyDown={(e) => e.key === "Enter" && console.log("submitted")}
       />
     </InputWrapper>
@@ -50,7 +50,6 @@ const InputWrapper = styled.div`
   }
 `;
 
-// TODO needs border color fix on hover!
 export const CheckBox = styled.span`
   display: flex;
   justify-content: center;

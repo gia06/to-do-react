@@ -28,7 +28,9 @@ function ToDoList(props) {
 
         <ToDo>
           <p style={{ display: "inline-block" }}>item 1</p>
-          {/* //TODO have to add delete functionality */}
+          {/* 
+          // TODO - needs individual identifiers for hover effects
+          // TODO  - have to add delete functionality */}
           {hover || innerWidth < 1024 ? (
             <img src={crossIcon} style={{ cursor: "pointer" }} />
           ) : null}
@@ -48,7 +50,9 @@ function ToDoList(props) {
 
         <ToDo>
           <p>item 2</p>
-          {/* <img src={crossIcon} /> */}
+          {hover || innerWidth < 1024 ? (
+            <img src={crossIcon} style={{ cursor: "pointer" }} />
+          ) : null}
         </ToDo>
         <LineBetween isDarkTheme={props.isDarkTheme} />
       </Item>
