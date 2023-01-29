@@ -8,12 +8,19 @@ import ToDoList from "./components/ToDoList";
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [apiData, setApiData] = useState("");
 
-  const api = process.env.REACT_APP_API;
+  const api = "http://localhost:3001"; //* process.env.REACT_APP_API;
 
   const fetchData = async () => {
-    // const i = await axios.get(`${api}/toDos`);
-    // console.log(i);
+    try {
+      const response = await (await axios.get(`${api}/toDos`)).data;
+      setApiData(response.data);
+
+      // console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -27,7 +34,7 @@ function App() {
       <Main>
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
         <ToDoInput isDarkTheme={isDarkTheme} />
-        <ToDoList isDarkTheme={isDarkTheme} />
+        <ToDoList isDarkTheme={isDarkTheme} apiData={apiData} />
       </Main>
     </AppWrapper>
   );

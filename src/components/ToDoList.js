@@ -5,57 +5,69 @@ import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
 
 function ToDoList(props) {
-  const [itemCheck, setItemCheck] = useState(false);
-  const [hover, setHover] = useState(false);
+  const [itemCheck, setItemCheck] = useState([]);
+  const [hover, setHover] = useState([]);
 
   const { innerWidth } = window;
 
+  const handleCheck = (id) => {
+    const status = itemCheck.includes(id);
+    const unChecked = itemCheck.filter((storedId) => storedId !== id);
+
+    return status ? setItemCheck(unChecked) : setItemCheck([...itemCheck, id]);
+  };
+
+  // TODO needs fix to mark checked completed todos by default
+  useEffect(() => {
+    if (props.apiData) {
+      props.apiData.map(
+        (todo) => console.log(todo)
+        // todo.itemStatus === "completed" &&
+        // setItemCheck([...itemCheck, todo._id])
+      );
+      console.log(itemCheck);
+    }
+  }, [props.apiData]);
+
+  // console.log(itemCheck);
+
   return (
     <ItemWrapper isDarkTheme={props.isDarkTheme}>
-      <Item
-        isDarkTheme={props.isDarkTheme}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        <ItemCheckBox
-          type="checkbox"
-          onClick={() => setItemCheck(!itemCheck)}
-          itemCheck={itemCheck}
-          isDarkTheme={props.isDarkTheme}
-        >
-          <img src={itemCheck ? checkIcon : ""} />
-        </ItemCheckBox>
+      {props.apiData
+        ? props.apiData.map((todo) => {
+            return (
+              <Item key={todo._id} isDarkTheme={props.isDarkTheme}>
+                <ItemCheckBox
+                  type="checkbox"
+                  onClick={() => handleCheck(todo._id)}
+                  itemCheck={itemCheck}
+                  isDarkTheme={props.isDarkTheme}
+                  itemStatus={todo.itemStatus}
+                  id={todo._id}
+                >
+                  <img src={itemCheck.includes(todo._id) ? checkIcon : ""} />
+                </ItemCheckBox>
 
-        <ToDo>
-          <p style={{ display: "inline-block" }}>item 1</p>
-          {/* 
-          // TODO - needs individual identifiers for hover effects
-          // TODO  - have to add delete functionality */}
-          {hover || innerWidth < 1024 ? (
-            <img src={crossIcon} style={{ cursor: "pointer" }} />
-          ) : null}
-        </ToDo>
-        <LineBetween isDarkTheme={props.isDarkTheme} />
-      </Item>
+                <ToDo
+                  onMouseEnter={() => setHover([...hover, todo._id])}
+                  onMouseLeave={() =>
+                    setHover(hover.filter((storedId) => storedId !== todo._id))
+                  }
+                >
+                  <p style={{ display: "inline-block" }}>{todo.toDoItem}</p>
+                  {/*
 
-      {/* // * for testing */}
-      <Item isDarkTheme={props.isDarkTheme}>
-        <ItemCheckBox
-          type="checkbox"
-          onClick={() => setItemCheck(!itemCheck)}
-          itemCheck={itemCheck}
-        >
-          <img src={itemCheck ? checkIcon : ""} />
-        </ItemCheckBox>
-
-        <ToDo>
-          <p>item 2</p>
-          {hover || innerWidth < 1024 ? (
-            <img src={crossIcon} style={{ cursor: "pointer" }} />
-          ) : null}
-        </ToDo>
-        <LineBetween isDarkTheme={props.isDarkTheme} />
-      </Item>
+                  // * should test converting to background-image format
+                  // TODO  - have to add delete functionality */}
+                  {hover.includes(todo._id) || innerWidth < 1024 ? (
+                    <img src={crossIcon} style={{ cursor: "pointer" }} />
+                  ) : null}
+                </ToDo>
+                <LineBetween isDarkTheme={props.isDarkTheme} />
+              </Item>
+            );
+          })
+        : null}
     </ItemWrapper>
   );
 }
@@ -90,7 +102,9 @@ const Item = styled.div`
 const ItemCheckBox = styled(CheckBox)`
   margin-top: 20px;
   background: ${(props) =>
-    props.itemCheck ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)" : ""};
+    props.itemCheck.includes(props.id)
+      ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
+      : ""};
 
   @media (max-width: 375px) {
     margin-top: 14px;
