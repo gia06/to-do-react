@@ -73,7 +73,7 @@ function ToDoList(props) {
             );
           })
         : null}
-      <Footer isDarkTheme={props.isDarkTheme} />
+      {/* <Footer isDarkTheme={props.isDarkTheme} apiData={props.apiData} /> */}
     </ItemWrapper>
   );
 }

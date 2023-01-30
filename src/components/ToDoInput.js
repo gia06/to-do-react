@@ -5,12 +5,12 @@ import checkIcon from "../assets/icon-check.svg";
 
 function ToDoInput(props) {
   const [inputValue, setInputValue] = useState("");
-  const [inputCheck, setInputCheck] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(false);
 
   const createToDo = async () => {
     const i = await axios.post("http://localhost:3001/create-toDo", {
       toDoItem: inputValue,
-      itemStatus: inputCheck ? "completed" : "active",
+      itemStatus: checkedItems ? "completed" : "active",
     });
     setInputValue("");
     console.log(i);
@@ -20,11 +20,11 @@ function ToDoInput(props) {
     <InputWrapper onSubmit={createToDo}>
       <CheckBox
         type="checkbox"
-        onClick={() => setInputCheck(!inputCheck)}
-        inputCheck={inputCheck}
+        onClick={() => setCheckedItems(!checkedItems)}
+        checkedItems={checkedItems}
         isDarkTheme={props.isDarkTheme}
       >
-        <img src={inputCheck ? checkIcon : ""} />
+        <img src={checkedItems ? checkIcon : ""} />
       </CheckBox>
 
       <MainInput
@@ -70,7 +70,7 @@ export const CheckBox = styled.span`
   border: 1px solid ${(props) => (props.isDarkTheme ? "#393a4b" : "#E3E4F1")};
   border-radius: 50%;
   background: ${(props) =>
-    props.inputCheck
+    props.checkedItems
       ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
       : ""};
   position: absolute;

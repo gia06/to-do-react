@@ -36,7 +36,7 @@ function App() {
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
         <ToDoInput isDarkTheme={isDarkTheme} />
         <ToDoList isDarkTheme={isDarkTheme} apiData={apiData} />
-        {/* <Footer /> */}
+        <Footer isDarkTheme={isDarkTheme} apiData={apiData} />
       </Main>
     </AppWrapper>
   );
