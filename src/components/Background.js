@@ -11,7 +11,6 @@ function Background(props) {
 const BackgroundImg = styled.div`
   width: 100vw;
   height: 300px;
-  z-index: 0;
 
   background-image: url(${(props) =>
     props.isDarkTheme ? bgDeskDark : bgDeskLight});

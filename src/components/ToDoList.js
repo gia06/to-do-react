@@ -49,10 +49,14 @@ function ToDoList(props) {
                 </ItemCheckBox>
 
                 <ToDo
-                // onMouseEnter={() => setHover([...hover, todo._id])}
-                // onMouseLeave={() =>
-                //   setHover(hover.filter((storedId) => storedId !== todo._id))
-                // }
+                  itemCheck={itemCheck}
+                  id={todo._id}
+                  isDarkTheme={props.isDarkTheme}
+
+                  // onMouseEnter={() => setHover([...hover, todo._id])}
+                  // onMouseLeave={() =>
+                  //   setHover(hover.filter((storedId) => storedId !== todo._id))
+                  // }
                 >
                   <p style={{ display: "inline-block" }}>{todo.toDoItem}</p>
                   {/*
@@ -126,6 +130,14 @@ const ToDo = styled.div`
   margin: 23px 20px 23px 72px;
 
   // TODO this should happen when checked --- text-decoration-line: line-through;
+  text-decoration-line: ${(props) =>
+    props.itemCheck.includes(props.id) ? "line-through" : ""};
+  color: ${(props) =>
+    props.itemCheck.includes(props.id) && props.isDarkTheme
+      ? "#4D5067"
+      : props.itemCheck.includes(props.id) && !props.isDarkTheme
+      ? "#D1D2DA"
+      : ""};
 
   @media (max-width: 375px) {
     margin: 15px 20px 15px 72px;
