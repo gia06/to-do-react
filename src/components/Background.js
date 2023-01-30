@@ -1,16 +1,25 @@
 import styled from "styled-components";
-import bgLight from "../assets/bg-desktop-light.jpg";
-import bgDark from "../assets/bg-desktop-dark.jpg";
+import bgDeskLight from "../assets/bg-desktop-light.jpg";
+import bgDeskDark from "../assets/bg-desktop-dark.jpg";
+import bgMobLight from "../assets/bg-mobile-light.jpg";
+import bgMobDark from "../assets/bg-mobile-dark.jpg";
 
 function Background(props) {
-  return <BackgroundImg src={props.isDarkTheme ? bgDark : bgLight} />;
+  return <BackgroundImg isDarkTheme={props.isDarkTheme} />;
 }
 
-const BackgroundImg = styled.img`
+const BackgroundImg = styled.div`
   width: 100vw;
   height: 300px;
-  z-index: 0;
+
+  background-image: url(${(props) =>
+    props.isDarkTheme ? bgDeskDark : bgDeskLight});
+  background-repeat: no-repeat;
+  background-size: cover;
+
   @media (max-width: 375px) {
+    background-image: url(${(props) =>
+      props.isDarkTheme ? bgMobDark : bgMobLight});
     height: 200px;
   }
 `;
