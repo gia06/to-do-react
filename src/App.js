@@ -5,6 +5,7 @@ import Background from "./components/Background";
 import Header from "./components/Header";
 import ToDoInput from "./components/ToDoInput";
 import ToDoList from "./components/ToDoList";
+import Footer from "./components/Footer";
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -35,6 +36,7 @@ function App() {
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
         <ToDoInput isDarkTheme={isDarkTheme} />
         <ToDoList isDarkTheme={isDarkTheme} apiData={apiData} />
+        {/* <Footer /> */}
       </Main>
     </AppWrapper>
   );

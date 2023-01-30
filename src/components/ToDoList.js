@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "./ToDoInput";
 import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
+import Footer from "./Footer";
 
 function ToDoList(props) {
   const [itemCheck, setItemCheck] = useState([]);
@@ -20,10 +21,8 @@ function ToDoList(props) {
   // TODO needs fix to mark checked completed todos by default
   useEffect(() => {
     if (props.apiData) {
-      props.apiData.map(
-        (todo) => console.log(todo)
-        // todo.itemStatus === "completed" &&
-        // setItemCheck([...itemCheck, todo._id])
+      props.apiData.map((todo) =>
+        todo.itemStatus === "completed" ? itemCheck.push(todo._id) : null
       );
       console.log(itemCheck);
     }
@@ -53,6 +52,7 @@ function ToDoList(props) {
                   id={todo._id}
                   isDarkTheme={props.isDarkTheme}
 
+                  // * option for remove icon appearance
                   // onMouseEnter={() => setHover([...hover, todo._id])}
                   // onMouseLeave={() =>
                   //   setHover(hover.filter((storedId) => storedId !== todo._id))
@@ -73,6 +73,7 @@ function ToDoList(props) {
             );
           })
         : null}
+      <Footer isDarkTheme={props.isDarkTheme} />
     </ItemWrapper>
   );
 }
