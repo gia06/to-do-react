@@ -49,19 +49,20 @@ function ToDoList(props) {
                 </ItemCheckBox>
 
                 <ToDo
-                  onMouseEnter={() => setHover([...hover, todo._id])}
-                  onMouseLeave={() =>
-                    setHover(hover.filter((storedId) => storedId !== todo._id))
-                  }
+                // onMouseEnter={() => setHover([...hover, todo._id])}
+                // onMouseLeave={() =>
+                //   setHover(hover.filter((storedId) => storedId !== todo._id))
+                // }
                 >
                   <p style={{ display: "inline-block" }}>{todo.toDoItem}</p>
                   {/*
 
                   // * should test converting to background-image format
                   // TODO  - have to add delete functionality */}
-                  {hover.includes(todo._id) || innerWidth < 1024 ? (
+
+                  {/* {hover.includes(todo._id) || innerWidth < 1024 ? (
                     <img src={crossIcon} style={{ cursor: "pointer" }} />
-                  ) : null}
+                  ) : null} */}
                 </ToDo>
                 <LineBetween isDarkTheme={props.isDarkTheme} />
               </Item>
@@ -94,6 +95,12 @@ const Item = styled.div`
   line-height: 18px;
   letter-spacing: -0.25px;
 
+  :hover {
+    background-image: url(${crossIcon});
+    background-repeat: no-repeat;
+    background-position: right 24px top 23px;
+  }
+
   @media (max-width: 375px) {
     height: 48px;
   }
@@ -117,6 +124,8 @@ const ToDo = styled.div`
   margin: auto 0;
   justify-content: space-between;
   margin: 23px 20px 23px 72px;
+
+  // TODO this should happen when checked --- text-decoration-line: line-through;
 
   @media (max-width: 375px) {
     margin: 15px 20px 15px 72px;

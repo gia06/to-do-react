@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import checkIcon from "../assets/icon-check.svg";
@@ -5,6 +6,15 @@ import checkIcon from "../assets/icon-check.svg";
 function ToDoInput(props) {
   const [inputValue, setInputValue] = useState("");
   const [inputCheck, setInputCheck] = useState(false);
+
+  const createTodo = async () => {
+    const i = await axios.post("http://localhost:3001/create-toDo", {
+      toDoItem: inputValue,
+      itemStatus: inputCheck ? "completed" : "active",
+    });
+    setInputValue("");
+    console.log(i);
+  };
 
   return (
     <InputWrapper>
@@ -23,7 +33,7 @@ function ToDoInput(props) {
         onChange={(e) => setInputValue(e.target.value)}
         isDarkTheme={props.isDarkTheme}
         // TODO - needs submitting function here when ready
-        onKeyDown={(e) => e.key === "Enter" && console.log("submitted")}
+        onKeyDown={async (e) => (e.key === "Enter" ? await createTodo() : null)}
       />
     </InputWrapper>
   );

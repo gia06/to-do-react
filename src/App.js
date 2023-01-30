@@ -59,7 +59,7 @@ const Main = styled.main`
   width: 60%;
   max-width: 540px;
   min-width: 327px;
-  z-index: 1;
+
   @media (max-width: 375px) {
     top: 48px;
   }
