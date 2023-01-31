@@ -33,8 +33,6 @@ function ToDoInput(props) {
         placeholder="Create a new todo..."
         onChange={(e) => setInputValue(e.target.value)}
         isDarkTheme={props.isDarkTheme}
-        // TODO - needs submitting function here when ready
-        // onKeyDown={async (e) => (e.key === "Enter" ? await createTodo() : null)}
       />
     </InputWrapper>
   );
@@ -55,12 +53,13 @@ const InputWrapper = styled.form`
   letter-spacing: -0.25px;
   color: #393a4b;
 
-  @media (max-width: 375px) {
+  @media (max-width: 546px) {
     height: 48px;
     margin-bottom: 16px;
   }
 `;
 
+// TODO should try change hover color to something user friendly
 export const CheckBox = styled.span`
   display: flex;
   justify-content: center;
@@ -88,8 +87,10 @@ export const CheckBox = styled.span`
     background-clip: content-box, border-box;
   }
 
-  @media (max-width: 375px) {
+  @media (max-width: 546px) {
     left: 20px;
+    width: 20px;
+    height: 20px;
   }
 `;
 

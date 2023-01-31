@@ -36,7 +36,7 @@ function App() {
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
         <ToDoInput isDarkTheme={isDarkTheme} />
         <ToDoList isDarkTheme={isDarkTheme} apiData={apiData} />
-        <Footer isDarkTheme={isDarkTheme} apiData={apiData} />
+        {/* <Footer isDarkTheme={isDarkTheme} apiData={apiData} /> */}
       </Main>
     </AppWrapper>
   );
@@ -56,13 +56,15 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 60%;
   position: absolute;
   top: 70px;
-  width: 60%;
   max-width: 540px;
   min-width: 327px;
+  font-size: 18px;
 
-  @media (max-width: 375px) {
+  @media (max-width: 546px) {
     top: 48px;
+    font-size: 12px;
   }
 `;

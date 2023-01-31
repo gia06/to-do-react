@@ -73,7 +73,7 @@ function ToDoList(props) {
             );
           })
         : null}
-      {/* <Footer isDarkTheme={props.isDarkTheme} apiData={props.apiData} /> */}
+      <Footer isDarkTheme={props.isDarkTheme} apiData={props.apiData} />
     </ItemWrapper>
   );
 }
@@ -96,7 +96,6 @@ const Item = styled.div`
   border-radius: 5px;
   color: ${(props) => (props.isDarkTheme ? "#C8CBE7" : "#393a4b")};
   margin: auto 0;
-  font-size: 18px;
   line-height: 18px;
   letter-spacing: -0.25px;
 
@@ -111,6 +110,7 @@ const Item = styled.div`
   }
 `;
 
+//  TODO should try relative positioning
 const ItemCheckBox = styled(CheckBox)`
   margin-top: 20px;
   background: ${(props) =>
