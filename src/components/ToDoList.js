@@ -6,29 +6,35 @@ import crossIcon from "../assets/icon-cross.svg";
 import Footer from "./Footer";
 
 function ToDoList(props) {
-  const [itemCheck, setItemCheck] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
   const [hover, setHover] = useState([]);
+  const [numOfCompleted, setNumOfCompleted] = useState(0);
 
   const { innerWidth } = window;
 
-  const handleCheck = (id) => {
-    const status = itemCheck.includes(id);
-    const unChecked = itemCheck.filter((storedId) => storedId !== id);
+  const handleData = (todo) => {
+    checkedItems.push(todo._id);
+    setNumOfCompleted((num) => num + 1);
+  };
 
-    return status ? setItemCheck(unChecked) : setItemCheck([...itemCheck, id]);
+  const handleCheck = (id) => {
+    const status = checkedItems.includes(id);
+    const unChecked = checkedItems.filter((storedId) => storedId !== id);
+
+    return status
+      ? setCheckedItems(unChecked)
+      : setCheckedItems([...checkedItems, id]);
   };
 
   // TODO needs fix to mark checked completed todos by default
   useEffect(() => {
     if (props.apiData) {
       props.apiData.map((todo) =>
-        todo.itemStatus === "completed" ? itemCheck.push(todo._id) : null
+        todo.itemStatus === "completed" ? handleData(todo) : null
       );
-      console.log(itemCheck);
+      console.log(checkedItems);
     }
   }, [props.apiData]);
-
-  // console.log(itemCheck);
 
   return (
     <ItemWrapper isDarkTheme={props.isDarkTheme}>
@@ -39,16 +45,16 @@ function ToDoList(props) {
                 <ItemCheckBox
                   type="checkbox"
                   onClick={() => handleCheck(todo._id)}
-                  itemCheck={itemCheck}
+                  checkedItems={checkedItems}
                   isDarkTheme={props.isDarkTheme}
                   itemStatus={todo.itemStatus}
                   id={todo._id}
                 >
-                  <img src={itemCheck.includes(todo._id) ? checkIcon : ""} />
+                  <img src={checkedItems.includes(todo._id) ? checkIcon : ""} />
                 </ItemCheckBox>
 
                 <ToDo
-                  itemCheck={itemCheck}
+                  checkedItems={checkedItems}
                   id={todo._id}
                   isDarkTheme={props.isDarkTheme}
 
@@ -73,7 +79,11 @@ function ToDoList(props) {
             );
           })
         : null}
-      <Footer isDarkTheme={props.isDarkTheme} apiData={props.apiData} />
+      <Footer
+        isDarkTheme={props.isDarkTheme}
+        apiData={props.apiData}
+        numOfCompleted={numOfCompleted}
+      />
     </ItemWrapper>
   );
 }
@@ -114,9 +124,18 @@ const Item = styled.div`
 const ItemCheckBox = styled(CheckBox)`
   margin-top: 20px;
   background: ${(props) =>
-    props.itemCheck.includes(props.id)
+    props.checkedItems.includes(props.id)
       ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
       : ""};
+
+  :hover {
+    background-image: linear-gradient(
+      ${(props) =>
+        props.checkedItems.includes(props.id)
+          ? "135deg, #55ddff 0%, #c058f3 100%"
+          : ""}
+    );
+  }
 
   @media (max-width: 375px) {
     margin-top: 14px;
@@ -132,11 +151,11 @@ const ToDo = styled.div`
 
   // TODO this should happen when checked --- text-decoration-line: line-through;
   text-decoration-line: ${(props) =>
-    props.itemCheck.includes(props.id) ? "line-through" : ""};
+    props.checkedItems.includes(props.id) ? "line-through" : ""};
   color: ${(props) =>
-    props.itemCheck.includes(props.id) && props.isDarkTheme
+    props.checkedItems.includes(props.id) && props.isDarkTheme
       ? "#4D5067"
-      : props.itemCheck.includes(props.id) && !props.isDarkTheme
+      : props.checkedItems.includes(props.id) && !props.isDarkTheme
       ? "#D1D2DA"
       : ""};
 

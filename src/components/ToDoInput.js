@@ -5,12 +5,12 @@ import checkIcon from "../assets/icon-check.svg";
 
 function ToDoInput(props) {
   const [inputValue, setInputValue] = useState("");
-  const [checkedItems, setCheckedItems] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const createToDo = async () => {
     const i = await axios.post("http://localhost:3001/create-toDo", {
       toDoItem: inputValue,
-      itemStatus: checkedItems ? "completed" : "active",
+      itemStatus: isChecked ? "completed" : "active",
     });
     setInputValue("");
     console.log(i);
@@ -20,11 +20,11 @@ function ToDoInput(props) {
     <InputWrapper onSubmit={createToDo}>
       <CheckBox
         type="checkbox"
-        onClick={() => setCheckedItems(!checkedItems)}
-        checkedItems={checkedItems}
+        onClick={() => setIsChecked(!isChecked)}
+        isChecked={isChecked}
         isDarkTheme={props.isDarkTheme}
       >
-        <img src={checkedItems ? checkIcon : ""} />
+        <img src={isChecked ? checkIcon : ""} />
       </CheckBox>
 
       <MainInput
@@ -59,7 +59,6 @@ const InputWrapper = styled.form`
   }
 `;
 
-// TODO should try change hover color to something user friendly
 export const CheckBox = styled.span`
   display: flex;
   justify-content: center;
@@ -69,9 +68,7 @@ export const CheckBox = styled.span`
   border: 1px solid ${(props) => (props.isDarkTheme ? "#393a4b" : "#E3E4F1")};
   border-radius: 50%;
   background: ${(props) =>
-    props.checkedItems
-      ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
-      : ""};
+    props.isChecked ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)" : ""};
   position: absolute;
   left: 24px;
   cursor: pointer;
@@ -83,6 +80,11 @@ export const CheckBox = styled.span`
           props.isDarkTheme ? "#25273d, #25273d" : "#ffffff, #ffffff"}
       ),
       linear-gradient(135deg, #55ddff 0%, #c058f3 100%);
+
+    background-image: linear-gradient(
+      ${(props) => (props.isChecked ? "135deg, #55ddff 0%, #c058f3 100%" : "")}
+    );
+
     background-origin: border-box;
     background-clip: content-box, border-box;
   }
