@@ -26,13 +26,12 @@ function ToDoList(props) {
       : setCheckedItems([...checkedItems, id]);
   };
 
-  // TODO needs fix to mark checked completed todos by default
   useEffect(() => {
     if (props.apiData) {
       props.apiData.map((todo) =>
         todo.itemStatus === "completed" ? handleData(todo) : null
       );
-      console.log(checkedItems);
+      // console.log(checkedItems);
     }
   }, [props.apiData]);
 
@@ -42,17 +41,6 @@ function ToDoList(props) {
         ? props.apiData.map((todo) => {
             return (
               <Item key={todo._id} isDarkTheme={props.isDarkTheme}>
-                <ItemCheckBox
-                  type="checkbox"
-                  onClick={() => handleCheck(todo._id)}
-                  checkedItems={checkedItems}
-                  isDarkTheme={props.isDarkTheme}
-                  itemStatus={todo.itemStatus}
-                  id={todo._id}
-                >
-                  <img src={checkedItems.includes(todo._id) ? checkIcon : ""} />
-                </ItemCheckBox>
-
                 <ToDo
                   checkedItems={checkedItems}
                   id={todo._id}
@@ -64,26 +52,39 @@ function ToDoList(props) {
                   //   setHover(hover.filter((storedId) => storedId !== todo._id))
                   // }
                 >
-                  <p style={{ display: "inline-block" }}>{todo.toDoItem}</p>
+                  <ItemCheckBox
+                    type="checkbox"
+                    onClick={() => handleCheck(todo._id)}
+                    checkedItems={checkedItems}
+                    isDarkTheme={props.isDarkTheme}
+                    itemStatus={todo.itemStatus}
+                    id={todo._id}
+                  >
+                    <img
+                      src={checkedItems.includes(todo._id) ? checkIcon : ""}
+                    />
+                  </ItemCheckBox>
+                  <p>{todo.toDoItem}</p>
                   {/*
 
                   // * should test converting to background-image format
                   // TODO  - have to add delete functionality */}
 
-                  {/* {hover.includes(todo._id) || innerWidth < 1024 ? (
-                    <img src={crossIcon} style={{ cursor: "pointer" }} />
-                  ) : null} */}
+                  {/* {hover.includes(todo._id) || innerWidth < 1024 ? ( */}
+                  {/* <img src={crossIcon} style={{ cursor: "pointer" }} /> */}
+                  {/* ) : null} */}
                 </ToDo>
+
                 <LineBetween isDarkTheme={props.isDarkTheme} />
               </Item>
             );
           })
         : null}
-      <Footer
+      {/* <Footer
         isDarkTheme={props.isDarkTheme}
         apiData={props.apiData}
         numOfCompleted={numOfCompleted}
-      />
+      /> */}
     </ItemWrapper>
   );
 }
@@ -96,14 +97,15 @@ const ItemWrapper = styled.div`
   width: 100%;
   background: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
   box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
+  max-height: 439px;
 `;
 
 const Item = styled.div`
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 64px;
-  border-radius: 5px;
   color: ${(props) => (props.isDarkTheme ? "#C8CBE7" : "#393a4b")};
   margin: auto 0;
   line-height: 18px;
@@ -122,7 +124,8 @@ const Item = styled.div`
 
 //  TODO should try relative positioning
 const ItemCheckBox = styled(CheckBox)`
-  margin-top: 20px;
+  position: relative;
+
   background: ${(props) =>
     props.checkedItems.includes(props.id)
       ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
@@ -136,18 +139,22 @@ const ItemCheckBox = styled(CheckBox)`
           : ""}
     );
   }
-
-  @media (max-width: 375px) {
-    margin-top: 14px;
-  }
 `;
 
 const ToDo = styled.div`
   display: flex;
+  flex-direction: row
+
+  display: inline;
   align-items: center;
-  margin: auto 0;
-  justify-content: space-between;
-  margin: 23px 20px 23px 72px;
+
+  width: 100%;
+  height: 100%;
+
+  p {
+    display: inline;
+    padding-left: 46px;
+  }
 
   // TODO this should happen when checked --- text-decoration-line: line-through;
   text-decoration-line: ${(props) =>
@@ -159,9 +166,6 @@ const ToDo = styled.div`
       ? "#D1D2DA"
       : ""};
 
-  @media (max-width: 375px) {
-    margin: 15px 20px 15px 72px;
-  }
 `;
 
 const LineBetween = styled.hr`

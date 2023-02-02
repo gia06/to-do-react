@@ -24,6 +24,17 @@ function App() {
     }
   };
 
+  const updateItemStatus = async (id) => {
+    try {
+      const response = await (await axios.put(`${api}/update-toDo`)).data;
+      setApiData(response.data);
+
+      // console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -35,8 +46,17 @@ function App() {
       <Main>
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
         <ToDoInput isDarkTheme={isDarkTheme} />
-        <ToDoList isDarkTheme={isDarkTheme} apiData={apiData} />
-        {/* <Footer isDarkTheme={isDarkTheme} apiData={apiData} /> */}
+        <ToDoList
+          isDarkTheme={isDarkTheme}
+          apiData={apiData}
+          updateItemStatus={updateItemStatus}
+        />
+        <Footer
+          isDarkTheme={isDarkTheme}
+          apiData={apiData}
+          setApiData={setApiData}
+          fetchData={fetchData}
+        />
       </Main>
     </AppWrapper>
   );

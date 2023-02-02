@@ -3,40 +3,72 @@ import styled from "styled-components";
 
 function Footer(props) {
   const [childNum, setChildNum] = useState(1);
+  const [itemsLeft, setItemsLeft] = useState("");
+
+  const { innerWidth } = window;
+
+  const handleLeftItems = () => {
+    let completed = 0;
+    let active = 0;
+
+    if (props.apiData) {
+      props.apiData.map((todo) =>
+        todo.itemStatus === "active" ? active++ : completed++
+      );
+    }
+    console.log(completed, active);
+    setItemsLeft(props.apiData.length - completed);
+  };
 
   useEffect(() => {
-    console.log(childNum);
+    // props.fetchData();
+    // handleLeftItems();
   }, [childNum]);
 
-  return (
-    <FooterWrapper>
-      <FooterItem isDarkTheme={props.isDarkTheme}>items left</FooterItem>
+  const filterData = (status, nthChild) => {
+    setChildNum(nthChild);
 
-      <FilterOptions isDarkTheme={props.isDarkTheme}>
+    const filteredData = props.apiData.filter(
+      (todo) => todo.itemStatus === status
+    );
+    console.log(filteredData);
+    props.setApiData(filteredData);
+  };
+
+  return (
+    <FooterWrapper isDarkTheme={props.isDarkTheme}>
+      <InnerItems isDarkTheme={props.isDarkTheme} childNum={childNum}>
         <FooterItem
-          onClick={() => setChildNum(1)}
-          childNum={childNum}
           isDarkTheme={props.isDarkTheme}
-          // onClick={apiData.filter((todo) => {})}
+          onClick={() => setChildNum(1)}
         >
           All
         </FooterItem>
+
         <FooterItem
           isDarkTheme={props.isDarkTheme}
-          onClick={() => setChildNum(2)}
-          childNum={childNum}
+          onClick={() => filterData("active", 2)}
         >
           Active
         </FooterItem>
+
         <FooterItem
           isDarkTheme={props.isDarkTheme}
-          onClick={() => setChildNum(3)}
-          childNum={childNum}
+          onClick={() => filterData("completed", 3)}
         >
           Completed
         </FooterItem>
-      </FilterOptions>
-      <FooterItem isDarkTheme={props.isDarkTheme}>Clear Completed</FooterItem>
+      </InnerItems>
+
+      <OuterItems isDarkTheme={props.isDarkTheme}>
+        <FooterItem isDarkTheme={props.isDarkTheme} childNum={childNum}>
+          {itemsLeft} items left
+        </FooterItem>
+
+        <FooterItem isDarkTheme={props.isDarkTheme} childNum={childNum}>
+          Clear Completed
+        </FooterItem>
+      </OuterItems>
     </FooterWrapper>
   );
 }
@@ -44,13 +76,14 @@ function Footer(props) {
 export default Footer;
 
 const FooterWrapper = styled.div`
-  padding: 0 24px;
   width: 100%;
   height: 60px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
+  border-radius: 0 0 5px 5px;
+
+  box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
 
   @media (max-width: 546px) {
     height: 48px;
@@ -64,8 +97,6 @@ const FooterItem = styled.p`
   line-height: 14px;
   color: ${(props) => (props.isDarkTheme ? "#5B5E7E" : "#9495A5")};
 
-  :nth-child(${(props) => props.childNum}) {
-    color: #3a7cfd;
   }
   :hover {
     color: ${(props) => (props.isDarkTheme ? "#E3E4F1" : "#494C6B")};
@@ -73,31 +104,37 @@ const FooterItem = styled.p`
 `;
 
 // TODO needs position adjustment
-const FilterOptions = styled.div`
+const InnerItems = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  width: 100%;
 
   p {
     margin: 0 9px;
+
+    :nth-child(${(props) => props.childNum}) {
+      color: #3a7cfd;
+    }
   }
 
-  @media (max-width: 546px) {
-    width: 100%;
-
-    width: auto;
-    min-width: 327px;
-    max-width: 546px;
-
+  @media (max-width: 760px) {
+    position: relative;
     height: 48px;
-    margin-top: 16px;
     align-items: center;
-    position: absolute;
-    top: 508px;
-    left: 0px;
+    top: 64px;
 
     background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
     box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
     border-radius: 5px;
   }
+`;
+
+const OuterItems = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px 0 20px;
 `;
