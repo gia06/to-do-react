@@ -108,5 +108,6 @@ const MainInput = styled.input`
   line-height: 18px;
   letter-spacing: -0.25px;
   color: ${(props) => (props.isDarkTheme ? "#C8CBE7" : "#393a4b")};
+  caret-color: #3a7cfd;
   background: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
 `;
