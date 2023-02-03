@@ -5,35 +5,34 @@ import checkIcon from "../assets/icon-check.svg";
 
 function ToDoInput(props) {
   const [inputValue, setInputValue] = useState("");
-  const [inputCheck, setInputCheck] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
-  const createTodo = async () => {
+  const createToDo = async () => {
     const i = await axios.post("http://localhost:3001/create-toDo", {
       toDoItem: inputValue,
-      itemStatus: inputCheck ? "completed" : "active",
+      itemStatus: isChecked ? "completed" : "active",
     });
     setInputValue("");
     console.log(i);
   };
 
   return (
-    <InputWrapper>
+    <InputWrapper onSubmit={createToDo}>
       <CheckBox
         type="checkbox"
-        onClick={() => setInputCheck(!inputCheck)}
-        inputCheck={inputCheck}
+        onClick={() => setIsChecked(!isChecked)}
+        isChecked={isChecked}
         isDarkTheme={props.isDarkTheme}
       >
-        <img src={inputCheck ? checkIcon : ""} />
+        <img src={isChecked ? checkIcon : ""} />
       </CheckBox>
+
       <MainInput
         type="text"
         value={inputValue}
         placeholder="Create a new todo..."
         onChange={(e) => setInputValue(e.target.value)}
         isDarkTheme={props.isDarkTheme}
-        // TODO - needs submitting function here when ready
-        onKeyDown={async (e) => (e.key === "Enter" ? await createTodo() : null)}
       />
     </InputWrapper>
   );
@@ -41,7 +40,7 @@ function ToDoInput(props) {
 
 export default ToDoInput;
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +53,7 @@ const InputWrapper = styled.div`
   letter-spacing: -0.25px;
   color: #393a4b;
 
-  @media (max-width: 375px) {
+  @media (max-width: 670px) {
     height: 48px;
     margin-bottom: 16px;
   }
@@ -69,9 +68,7 @@ export const CheckBox = styled.span`
   border: 1px solid ${(props) => (props.isDarkTheme ? "#393a4b" : "#E3E4F1")};
   border-radius: 50%;
   background: ${(props) =>
-    props.inputCheck
-      ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
-      : ""};
+    props.isChecked ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)" : ""};
   position: absolute;
   left: 24px;
   cursor: pointer;
@@ -83,12 +80,19 @@ export const CheckBox = styled.span`
           props.isDarkTheme ? "#25273d, #25273d" : "#ffffff, #ffffff"}
       ),
       linear-gradient(135deg, #55ddff 0%, #c058f3 100%);
+
+    background-image: linear-gradient(
+      ${(props) => (props.isChecked ? "135deg, #55ddff 0%, #c058f3 100%" : "")}
+    );
+
     background-origin: border-box;
     background-clip: content-box, border-box;
   }
 
-  @media (max-width: 375px) {
+  @media (max-width: 670px) {
     left: 20px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -104,5 +108,6 @@ const MainInput = styled.input`
   line-height: 18px;
   letter-spacing: -0.25px;
   color: ${(props) => (props.isDarkTheme ? "#C8CBE7" : "#393a4b")};
+  caret-color: #3a7cfd;
   background: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
 `;

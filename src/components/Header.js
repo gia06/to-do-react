@@ -8,7 +8,7 @@ function Header(props) {
       <Title>TODO</Title>
       <ThemeIcon
         src={props.isDarkTheme ? moonIcon : sunIcon}
-        onClick={() => props.setIsDarkTheme(!props.isDarkTheme)}
+        onClick={() => props.setIsDarkTheme((theme) => !theme)}
       />
     </Wrapper>
   );
