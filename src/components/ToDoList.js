@@ -99,6 +99,10 @@ const ItemWrapper = styled.div`
   box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.5);
   border-radius: 5px 5px 0 0;
   max-height: 439px;
+
+  @media (max-width: 546px) {
+    max-height: 366px;
+  }
 `;
 
 const Item = styled.div`

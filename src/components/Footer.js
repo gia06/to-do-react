@@ -7,21 +7,22 @@ function Footer(props) {
 
   const { innerWidth } = window;
 
-  const handleLeftItems = () => {
-    let completed = 0;
-    let active = 0;
+  // * left items
+  // const handleLeftItems = () => {
+  //   let completed = 0;
+  //   let active = 0;
 
-    if (props.apiData) {
-      props.apiData.map((todo) =>
-        todo.itemStatus === "active" ? active++ : completed++
-      );
-    }
-    console.log(completed, active);
-    setItemsLeft(props.apiData.length - completed);
-  };
+  //   if (props.apiData) {
+  //     props.apiData.map((todo) =>
+  //       todo.itemStatus === "active" ? active++ : completed++
+  //     );
+  //   }
+  //   console.log(completed, active);
+  //   setItemsLeft(props.apiData.length - completed);
+  // };
 
   useEffect(() => {
-    // props.fetchData();
+    props.fetchData();
     // handleLeftItems();
   }, [childNum]);
 
@@ -35,58 +36,77 @@ function Footer(props) {
     props.setApiData(filteredData);
   };
 
+  const innerItems = (
+    <>
+      <FooterItem
+        isDarkTheme={props.isDarkTheme}
+        onClick={() => setChildNum(1)}
+      >
+        All
+      </FooterItem>
+
+      <FooterItem
+        isDarkTheme={props.isDarkTheme}
+        onClick={() => filterData("active", 2)}
+      >
+        Active
+      </FooterItem>
+
+      <FooterItem
+        isDarkTheme={props.isDarkTheme}
+        onClick={() => filterData("completed", 3)}
+      >
+        Completed
+      </FooterItem>
+    </>
+  );
+
   return (
-    <FooterWrapper isDarkTheme={props.isDarkTheme}>
-      <InnerItems isDarkTheme={props.isDarkTheme} childNum={childNum}>
+    <>
+      <ItemsWrapper isDarkTheme={props.isDarkTheme}>
         <FooterItem
           isDarkTheme={props.isDarkTheme}
           onClick={() => setChildNum(1)}
         >
-          All
+          items left
         </FooterItem>
+
+        <InnerItemsDesk isDarkTheme={props.isDarkTheme} childNum={childNum}>
+          {innerItems}
+        </InnerItemsDesk>
 
         <FooterItem
           isDarkTheme={props.isDarkTheme}
-          onClick={() => filterData("active", 2)}
+          onClick={() => setChildNum(1)}
         >
-          Active
-        </FooterItem>
-
-        <FooterItem
-          isDarkTheme={props.isDarkTheme}
-          onClick={() => filterData("completed", 3)}
-        >
-          Completed
-        </FooterItem>
-      </InnerItems>
-
-      <OuterItems isDarkTheme={props.isDarkTheme}>
-        <FooterItem isDarkTheme={props.isDarkTheme} childNum={childNum}>
-          {itemsLeft} items left
-        </FooterItem>
-
-        <FooterItem isDarkTheme={props.isDarkTheme} childNum={childNum}>
           Clear Completed
         </FooterItem>
-      </OuterItems>
-    </FooterWrapper>
+      </ItemsWrapper>
+
+      <InnerItemsMob isDarkTheme={props.isDarkTheme} childNum={childNum}>
+        {innerItems}
+      </InnerItemsMob>
+    </>
   );
 }
 
 export default Footer;
 
-const FooterWrapper = styled.div`
+const ItemsWrapper = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
   border-radius: 0 0 5px 5px;
+  padding: 0 20px 0 20px;
 
   box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
 
   @media (max-width: 546px) {
     height: 48px;
+    justify-content: space-between;
   }
 `;
 
@@ -103,38 +123,37 @@ const FooterItem = styled.p`
   }
 `;
 
-// TODO needs position adjustment
-const InnerItems = styled.div`
+const InnerItemsDesk = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 100%;
+  align-items: center;
+  height: 48px;
 
   p {
-    margin: 0 9px;
+    margin: 0 19px;
 
     :nth-child(${(props) => props.childNum}) {
       color: #3a7cfd;
     }
   }
 
-  @media (max-width: 760px) {
-    position: relative;
-    height: 48px;
-    align-items: center;
-    top: 64px;
-
-    background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
-    box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
-    border-radius: 5px;
+  @media (max-width: 670px) {
+    display: none;
   }
 `;
 
-const OuterItems = styled.div`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const InnerItemsMob = styled(InnerItemsDesk)`
+  display: none;
   width: 100%;
-  padding: 0 20px 0 20px;
+  margin-top: 16px;
+  background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
+  box-shadow: 0px 35px 50px -15px ${(props) =>
+    props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)"};
+  border-radius: 5px;
+
+  @media (max-width: 670px) {
+    display: flex;
+    }
+  }
 `;
