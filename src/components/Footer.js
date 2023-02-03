@@ -5,8 +5,6 @@ function Footer(props) {
   const [childNum, setChildNum] = useState(1);
   const [itemsLeft, setItemsLeft] = useState("");
 
-  const { innerWidth } = window;
-
   // * left items
   // const handleLeftItems = () => {
   //   let completed = 0;
@@ -21,40 +19,30 @@ function Footer(props) {
   //   setItemsLeft(props.apiData.length - completed);
   // };
 
-  useEffect(() => {
-    props.fetchData();
-    // handleLeftItems();
-  }, [childNum]);
-
-  const filterData = (status, nthChild) => {
-    setChildNum(nthChild);
-
-    const filteredData = props.apiData.filter(
-      (todo) => todo.itemStatus === status
-    );
-    console.log(filteredData);
-    props.setApiData(filteredData);
+  const handleClick = (filterValue, childValue) => {
+    setChildNum(childValue);
+    props.setFilter(filterValue);
   };
 
   const innerItems = (
     <>
       <FooterItem
         isDarkTheme={props.isDarkTheme}
-        onClick={() => setChildNum(1)}
+        onClick={(e) => handleClick("all", 1)}
       >
         All
       </FooterItem>
 
       <FooterItem
         isDarkTheme={props.isDarkTheme}
-        onClick={() => filterData("active", 2)}
+        onClick={(e) => handleClick("active", 1)}
       >
         Active
       </FooterItem>
 
       <FooterItem
         isDarkTheme={props.isDarkTheme}
-        onClick={() => filterData("completed", 3)}
+        onClick={(e) => handleClick("completed", 3)}
       >
         Completed
       </FooterItem>
@@ -104,9 +92,8 @@ const ItemsWrapper = styled.div`
 
   box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     height: 48px;
-    justify-content: space-between;
   }
 `;
 

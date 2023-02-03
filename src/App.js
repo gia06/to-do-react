@@ -8,16 +8,26 @@ import ToDoList from "./components/ToDoList";
 import Footer from "./components/Footer";
 
 function App() {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [apiData, setApiData] = useState("");
+  const getTheme = () => {
+    return JSON.parse(localStorage.getItem("theme")).isDarkTheme;
+  };
+
+  const [isDarkTheme, setIsDarkTheme] = useState(getTheme);
+  const [apiData, setApiData] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   const api = "http://localhost:3001"; //* process.env.REACT_APP_API;
 
-  const fetchData = async () => {
+  const fetchData = async (filterValue) => {
     try {
+      console.log(filter);
       const response = await (await axios.get(`${api}/toDos`)).data;
-      setApiData(response.data);
-
+      const filteredData =
+        filterValue === "all"
+          ? response.data
+          : response.data.filter((todo) => todo.itemStatus === filterValue);
+      console.log(filteredData);
+      setApiData(filteredData);
       // console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -36,27 +46,30 @@ function App() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(filter);
+  }, [filter]);
+
+  useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify({ isDarkTheme }));
+  }, [isDarkTheme]);
 
   return (
-    // todo need to change bcg images according to mobile size
     <AppWrapper isDarkTheme={isDarkTheme}>
       <Background isDarkTheme={isDarkTheme} />
       <Main>
-        <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
+        <Header
+          isDarkTheme={isDarkTheme}
+          setIsDarkTheme={setIsDarkTheme}
+          // getTheme={getTheme}
+          // setTheme={setTheme}
+        />
         <ToDoInput isDarkTheme={isDarkTheme} />
         <ToDoList
           isDarkTheme={isDarkTheme}
           apiData={apiData}
           updateItemStatus={updateItemStatus}
         />
-        <Footer
-          isDarkTheme={isDarkTheme}
-          apiData={apiData}
-          setApiData={setApiData}
-          fetchData={fetchData}
-        />
+        <Footer isDarkTheme={isDarkTheme} setFilter={setFilter} />
       </Main>
     </AppWrapper>
   );
@@ -83,7 +96,7 @@ const Main = styled.main`
   min-width: 327px;
   font-size: 18px;
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     top: 48px;
     font-size: 12px;
   }

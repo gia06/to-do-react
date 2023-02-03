@@ -40,12 +40,15 @@ function ToDoList(props) {
       {props.apiData
         ? props.apiData.map((todo) => {
             return (
-              <Item key={todo._id} isDarkTheme={props.isDarkTheme}>
+              <Item
+                key={todo._id}
+                isDarkTheme={props.isDarkTheme}
+                // onMouseOver={() => console.log("mouse moved over")}
+              >
                 <ToDo
                   checkedItems={checkedItems}
                   id={todo._id}
                   isDarkTheme={props.isDarkTheme}
-
                   // * option for remove icon appearance
                   // onMouseEnter={() => setHover([...hover, todo._id])}
                   // onMouseLeave={() =>
@@ -98,9 +101,9 @@ const ItemWrapper = styled.div`
   background: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
   box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.5);
   border-radius: 5px 5px 0 0;
-  max-height: 439px;
+  max-height: 389px;
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     max-height: 366px;
   }
 `;
@@ -121,7 +124,7 @@ const Item = styled.div`
     background-position: right 24px top 23px;
   }
 
-  @media (max-width: 375px) {
+  @media (max-width: 670px) {
     height: 48px;
   }
 `;

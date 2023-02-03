@@ -17,7 +17,7 @@ const BackgroundImg = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     background-image: url(${(props) =>
       props.isDarkTheme ? bgMobDark : bgMobLight});
     height: 200px;

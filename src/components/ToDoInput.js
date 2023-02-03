@@ -53,7 +53,7 @@ const InputWrapper = styled.form`
   letter-spacing: -0.25px;
   color: #393a4b;
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     height: 48px;
     margin-bottom: 16px;
   }
@@ -89,7 +89,7 @@ export const CheckBox = styled.span`
     background-clip: content-box, border-box;
   }
 
-  @media (max-width: 546px) {
+  @media (max-width: 670px) {
     left: 20px;
     width: 20px;
     height: 20px;
