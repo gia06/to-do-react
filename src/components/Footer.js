@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import { deleteCompletedItems } from "../api/api";
 
-function Footer(props) {
+function Footer({ isDarkTheme, setFilter, activeItems, setTriggerDelete }) {
   const [childNum, setChildNum] = useState(1);
   const [itemsLeft, setItemsLeft] = useState("");
 
@@ -21,27 +22,27 @@ function Footer(props) {
 
   const handleClick = (filterValue, childValue) => {
     setChildNum(childValue);
-    props.setFilter(filterValue);
+    setFilter(filterValue);
   };
 
   const innerItems = (
     <>
       <FooterItem
-        isDarkTheme={props.isDarkTheme}
+        isDarkTheme={isDarkTheme}
         onClick={(e) => handleClick("all", 1)}
       >
         All
       </FooterItem>
 
       <FooterItem
-        isDarkTheme={props.isDarkTheme}
-        onClick={(e) => handleClick("active", 1)}
+        isDarkTheme={isDarkTheme}
+        onClick={(e) => handleClick("active", 2)}
       >
         Active
       </FooterItem>
 
       <FooterItem
-        isDarkTheme={props.isDarkTheme}
+        isDarkTheme={isDarkTheme}
         onClick={(e) => handleClick("completed", 3)}
       >
         Completed
@@ -51,27 +52,25 @@ function Footer(props) {
 
   return (
     <>
-      <ItemsWrapper isDarkTheme={props.isDarkTheme}>
-        <FooterItem
-          isDarkTheme={props.isDarkTheme}
-          onClick={() => setChildNum(1)}
-        >
-          items left
+      <ItemsWrapper isDarkTheme={isDarkTheme}>
+        <FooterItem isDarkTheme={isDarkTheme}>
+          {activeItems / 2} items left
         </FooterItem>
 
-        <InnerItemsDesk isDarkTheme={props.isDarkTheme} childNum={childNum}>
+        <InnerItemsDesk isDarkTheme={isDarkTheme} childNum={childNum}>
           {innerItems}
         </InnerItemsDesk>
 
+        {/* // TODO should add clear functionality */}
         <FooterItem
-          isDarkTheme={props.isDarkTheme}
-          onClick={() => setChildNum(1)}
+          isDarkTheme={isDarkTheme}
+          onClick={() => deleteCompletedItems(setTriggerDelete)}
         >
           Clear Completed
         </FooterItem>
       </ItemsWrapper>
 
-      <InnerItemsMob isDarkTheme={props.isDarkTheme} childNum={childNum}>
+      <InnerItemsMob isDarkTheme={isDarkTheme} childNum={childNum}>
         {innerItems}
       </InnerItemsMob>
     </>
@@ -86,11 +85,12 @@ const ItemsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
+  background-color: ${({ isDarkTheme }) =>
+    isDarkTheme ? "#25273D" : "#ffffff"};
   border-radius: 0 0 5px 5px;
   padding: 0 20px 0 20px;
 
-  box-shadow: 0px 35px 50px -15px ${(props) => (props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
+  box-shadow: 0px 35px 50px -15px ${({ isDarkTheme }) => (isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)")};
 
   @media (max-width: 670px) {
     height: 48px;
@@ -102,11 +102,11 @@ const FooterItem = styled.p`
   font-weight: 700;
   font-size: 14px;
   line-height: 14px;
-  color: ${(props) => (props.isDarkTheme ? "#5B5E7E" : "#9495A5")};
+  color: ${({ isDarkTheme }) => (isDarkTheme ? "#5B5E7E" : "#9495A5")};
 
   }
   :hover {
-    color: ${(props) => (props.isDarkTheme ? "#E3E4F1" : "#494C6B")};
+    color: ${({ isDarkTheme }) => (isDarkTheme ? "#E3E4F1" : "#494C6B")};
   }
 `;
 
@@ -120,7 +120,7 @@ const InnerItemsDesk = styled.div`
   p {
     margin: 0 19px;
 
-    :nth-child(${(props) => props.childNum}) {
+    :nth-child(${({ childNum }) => childNum}) {
       color: #3a7cfd;
     }
   }
@@ -134,9 +134,10 @@ const InnerItemsMob = styled(InnerItemsDesk)`
   display: none;
   width: 100%;
   margin-top: 16px;
-  background-color: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
-  box-shadow: 0px 35px 50px -15px ${(props) =>
-    props.isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)"};
+  background-color: ${({ isDarkTheme }) =>
+    isDarkTheme ? "#25273D" : "#ffffff"};
+  box-shadow: 0px 35px 50px -15px ${({ isDarkTheme }) =>
+    isDarkTheme ? "rgba(0, 0, 0, 0.5)" : "rgba(194, 195, 214, 0.5)"};
   border-radius: 5px;
 
   @media (max-width: 670px) {
