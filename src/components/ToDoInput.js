@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import checkIcon from "../assets/icon-check.svg";
 
-function ToDoInput(props) {
+function ToDoInput({ isDarkTheme }) {
   const [inputValue, setInputValue] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
@@ -22,7 +22,7 @@ function ToDoInput(props) {
         type="checkbox"
         onClick={() => setIsChecked(!isChecked)}
         isChecked={isChecked}
-        isDarkTheme={props.isDarkTheme}
+        isDarkTheme={isDarkTheme}
       >
         <img src={isChecked ? checkIcon : ""} />
       </CheckBox>
@@ -32,7 +32,7 @@ function ToDoInput(props) {
         value={inputValue}
         placeholder="Create a new todo..."
         onChange={(e) => setInputValue(e.target.value)}
-        isDarkTheme={props.isDarkTheme}
+        isDarkTheme={isDarkTheme}
       />
     </InputWrapper>
   );
@@ -65,10 +65,11 @@ export const CheckBox = styled.span`
   align-items: center;
   width: 24px;
   height: 24px;
-  border: 1px solid ${(props) => (props.isDarkTheme ? "#393a4b" : "#E3E4F1")};
+  border: 1px solid
+    ${({ isDarkTheme }) => (isDarkTheme ? "#393a4b" : "#E3E4F1")};
   border-radius: 50%;
-  background: ${(props) =>
-    props.isChecked ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)" : ""};
+  background: ${({ isChecked }) =>
+    isChecked ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)" : ""};
   position: absolute;
   left: 24px;
   cursor: pointer;
@@ -76,13 +77,14 @@ export const CheckBox = styled.span`
   :hover {
     border: double 1px transparent;
     background-image: linear-gradient(
-        ${(props) =>
-          props.isDarkTheme ? "#25273d, #25273d" : "#ffffff, #ffffff"}
+        ${({ isDarkTheme }) =>
+          isDarkTheme ? "#25273d, #25273d" : "#ffffff, #ffffff"}
       ),
       linear-gradient(135deg, #55ddff 0%, #c058f3 100%);
 
     background-image: linear-gradient(
-      ${(props) => (props.isChecked ? "135deg, #55ddff 0%, #c058f3 100%" : "")}
+      ${({ isChecked }) =>
+        isChecked ? "135deg, #55ddff 0%, #c058f3 100%" : ""}
     );
 
     background-origin: border-box;
@@ -107,7 +109,7 @@ const MainInput = styled.input`
   font-size: 18px;
   line-height: 18px;
   letter-spacing: -0.25px;
-  color: ${(props) => (props.isDarkTheme ? "#C8CBE7" : "#393a4b")};
+  color: ${({ isDarkTheme }) => (isDarkTheme ? "#C8CBE7" : "#393a4b")};
   caret-color: #3a7cfd;
-  background: ${(props) => (props.isDarkTheme ? "#25273D" : "#ffffff")};
+  background: ${({ isDarkTheme }) => (isDarkTheme ? "#25273D" : "#ffffff")};
 `;

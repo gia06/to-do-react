@@ -2,13 +2,13 @@ import styled from "styled-components";
 import sunIcon from "../assets/icon-sun.svg";
 import moonIcon from "../assets/icon-moon.svg";
 
-function Header(props) {
+function Header({ isDarkTheme, setIsDarkTheme }) {
   return (
     <Wrapper>
       <Title>TODO</Title>
       <ThemeIcon
-        src={props.isDarkTheme ? moonIcon : sunIcon}
-        onClick={() => props.setIsDarkTheme((theme) => !theme)}
+        src={isDarkTheme ? sunIcon : moonIcon}
+        onClick={() => setIsDarkTheme((theme) => !theme)}
       />
     </Wrapper>
   );
