@@ -20,7 +20,7 @@ function App() {
   const [apiData, setApiData] = useState([]);
   const [filter, setFilter] = useState("all");
   const [activeItems, setActiveItems] = useState(0);
-  const [deletedItem, setDeletedItem] = useState([]);
+  const [triggerDelete, setTriggerDelete] = useState("");
   const [testState, setTestState] = useState([]);
 
   // const [activeItems, setActiveItems] = useState(0);
@@ -31,7 +31,7 @@ function App() {
 
   useEffect(() => {
     fetchData(filter, setApiData);
-  }, [filter, deletedItem]);
+  }, [filter, triggerDelete]);
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify({ isDarkTheme }));
@@ -48,12 +48,13 @@ function App() {
           apiData={apiData}
           setActiveItems={setActiveItems}
           setFilter={setFilter}
-          setDeletedItem={setDeletedItem}
+          setTriggerDelete={setTriggerDelete}
         />
         <Footer
           isDarkTheme={isDarkTheme}
           activeItems={activeItems}
           setFilter={setFilter}
+          setTriggerDelete={setTriggerDelete}
         />
       </Main>
     </AppWrapper>

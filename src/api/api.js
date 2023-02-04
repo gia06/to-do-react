@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = "http://localhost:3001"; //* process.env.REACT_APP_API;
+const api = process.env.REACT_APP_API;
 
 export const fetchData = async (filterValue, setApiData) => {
   try {
@@ -12,7 +12,6 @@ export const fetchData = async (filterValue, setApiData) => {
 
     setApiData(filteredData);
   } catch (error) {
-    console.log(error);
     alert("Something went wrong, please try again");
   }
 };
@@ -26,19 +25,20 @@ export const updateItemStatus = async (id, handleCheck) => {
   }
 };
 
-export const deleteItem = async (id, setDeletedItem) => {
+export const deleteItem = async (id, setTriggerDelete) => {
   try {
     await axios.delete(`${api}/delete-toDo`, { data: { id } });
-    setDeletedItem((arr) => [...arr, id]);
+    setTriggerDelete("single-delete");
   } catch (error) {
     alert("Deleting item failed, please try again");
   }
 };
 
-export const deleteCompletedItems = async () => {
+export const deleteCompletedItems = async (setTriggerDelete) => {
   try {
     await axios.delete(`${api}/delete-completed`);
+    setTriggerDelete("clear-completed-delete");
   } catch (error) {
-    console.log(error);
+    alert("Deleting items failed, please try again");
   }
 };

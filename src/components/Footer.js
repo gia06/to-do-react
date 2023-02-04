@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { deleteCompletedItems } from "../api/api";
 
-function Footer({ isDarkTheme, setFilter, activeItems }) {
+function Footer({ isDarkTheme, setFilter, activeItems, setTriggerDelete }) {
   const [childNum, setChildNum] = useState(1);
   const [itemsLeft, setItemsLeft] = useState("");
 
@@ -53,7 +53,7 @@ function Footer({ isDarkTheme, setFilter, activeItems }) {
   return (
     <>
       <ItemsWrapper isDarkTheme={isDarkTheme}>
-        <FooterItem isDarkTheme={isDarkTheme} onClick={() => setChildNum(1)}>
+        <FooterItem isDarkTheme={isDarkTheme}>
           {activeItems / 2} items left
         </FooterItem>
 
@@ -62,7 +62,10 @@ function Footer({ isDarkTheme, setFilter, activeItems }) {
         </InnerItemsDesk>
 
         {/* // TODO should add clear functionality */}
-        <FooterItem isDarkTheme={isDarkTheme} onClick={() => setChildNum(1)}>
+        <FooterItem
+          isDarkTheme={isDarkTheme}
+          onClick={() => deleteCompletedItems(setTriggerDelete)}
+        >
           Clear Completed
         </FooterItem>
       </ItemsWrapper>
