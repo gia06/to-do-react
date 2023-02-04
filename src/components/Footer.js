@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-function Footer({ isDarkTheme, setFilter }) {
+function Footer({ isDarkTheme, setFilter, activeItems }) {
   const [childNum, setChildNum] = useState(1);
   const [itemsLeft, setItemsLeft] = useState("");
 
@@ -53,7 +53,7 @@ function Footer({ isDarkTheme, setFilter }) {
     <>
       <ItemsWrapper isDarkTheme={isDarkTheme}>
         <FooterItem isDarkTheme={isDarkTheme} onClick={() => setChildNum(1)}>
-          items left
+          {activeItems / 2} items left
         </FooterItem>
 
         <InnerItemsDesk isDarkTheme={isDarkTheme} childNum={childNum}>

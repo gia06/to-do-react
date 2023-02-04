@@ -17,21 +17,21 @@ export const fetchData = async (filterValue, setApiData) => {
   }
 };
 
-export const updateItemStatus = async (id) => {
+export const updateItemStatus = async (id, handleCheck) => {
   try {
-    const response = await axios.put(`${api}/update-toDo`, { id });
-    console.log(response);
+    await axios.put(`${api}/update-toDo`, { id });
+    handleCheck(id);
   } catch (error) {
-    console.log(error);
     alert("Error updating, please try again");
   }
 };
 
 export const deleteItem = async (id) => {
   try {
-    await axios.delete(`${api}/delete-toDo`, { id });
+    await axios.delete(`${api}/delete-toDo`, { data: { id } });
+    // setDeleted((arr) => [...arr, id]);
   } catch (error) {
-    console.log("delete error :", error);
+    console.log(error);
   }
 };
 

@@ -20,21 +20,13 @@ function App() {
   const [apiData, setApiData] = useState([]);
   const [filter, setFilter] = useState("all");
   const [activeItems, setActiveItems] = useState(0);
+  const [deleted, setDeleted] = useState([]);
 
-  // const updateItemStatus = async (id) => {
-  //   try {
-  //     const response = await (await axios.put(`${api}/update-toDo`)).data;
-  //     console.log(response);
-
-  //     // console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  // const [activeItems, setActiveItems] = useState(0);
 
   useEffect(() => {
     fetchData(filter, setApiData);
-  }, [filter]);
+  }, [filter, deleted]);
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify({ isDarkTheme }));
@@ -45,13 +37,18 @@ function App() {
       <Background isDarkTheme={isDarkTheme} />
       <Main>
         <Header isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
-        <ToDoInput isDarkTheme={isDarkTheme} setActiveItems={setActiveItems} />
+        <ToDoInput isDarkTheme={isDarkTheme} />
         <ToDoList
           isDarkTheme={isDarkTheme}
           apiData={apiData}
-          // updateItemStatus={updateItemStatus}
+          setActiveItems={setActiveItems}
+          setFilter={setFilter}
         />
-        <Footer isDarkTheme={isDarkTheme} setFilter={setFilter} />
+        <Footer
+          isDarkTheme={isDarkTheme}
+          setDeleted={setDeleted}
+          activeItems={activeItems}
+        />
       </Main>
     </AppWrapper>
   );

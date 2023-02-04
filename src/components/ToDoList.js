@@ -5,9 +5,8 @@ import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
 import { updateItemStatus, deleteItem, deleteCompletedItems } from "../api/api";
 
-function ToDoList({ isDarkTheme, apiData, setActiveItems }) {
+function ToDoList({ isDarkTheme, apiData, setActiveItems, setDeleted }) {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [numOfCompleted, setNumOfCompleted] = useState(0);
 
   const handleData = (todo) => {
     checkedItems.push(todo._id);
@@ -20,15 +19,14 @@ function ToDoList({ isDarkTheme, apiData, setActiveItems }) {
     status
       ? setCheckedItems(unChecked)
       : setCheckedItems([...checkedItems, id]);
-    updateItemStatus(id);
   };
 
   useEffect(() => {
-    if (apiData) {
-      apiData.map((todo) =>
-        todo.itemStatus === "completed" ? handleData(todo) : null
-      );
-    }
+    apiData?.map((todo) =>
+      todo.itemStatus === "completed"
+        ? handleData(todo)
+        : setActiveItems((num) => num + 1)
+    );
   }, [apiData]);
 
   return (
@@ -42,11 +40,9 @@ function ToDoList({ isDarkTheme, apiData, setActiveItems }) {
               isDarkTheme={isDarkTheme}
             >
               <ItemCheckBox
-                type="checkbox"
-                onClick={() => handleCheck(todo._id)}
+                onClick={() => updateItemStatus(todo._id, handleCheck)}
                 checkedItems={checkedItems}
                 isDarkTheme={isDarkTheme}
-                itemStatus={todo.itemStatus}
                 id={todo._id}
               >
                 <img src={checkedItems.includes(todo._id) ? checkIcon : ""} />
@@ -54,7 +50,13 @@ function ToDoList({ isDarkTheme, apiData, setActiveItems }) {
 
               <p>{todo.toDoItem}</p>
 
-              <RemoveButton src={crossIcon} style={{ cursor: "pointer" }} />
+              <RemoveButton
+                src={crossIcon}
+                onClick={() => {
+                  // deleteItem(todo._id, setDeleted);
+                  setDeleted((arr) => [...arr, todo._id]);
+                }}
+              />
             </ToDo>
 
             <LineBetween isDarkTheme={isDarkTheme} />
@@ -96,23 +98,6 @@ const Item = styled.div`
   }
 `;
 
-//  TODO should try relative positioning
-const ItemCheckBox = styled(CheckBox)`
-  position: relative;
-
-  background: ${({ checkedItems, id }) =>
-    checkedItems.includes(id)
-      ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
-      : ""};
-
-  :hover {
-    background-image: linear-gradient(
-      ${({ checkedItems, id }) =>
-        checkedItems.includes(id) ? "135deg, #55ddff 0%, #c058f3 100%" : ""}
-    );
-  }
-`;
-
 const ToDo = styled.div`
   display: flex;
   flex-direction: row;
@@ -131,6 +116,7 @@ const ToDo = styled.div`
         display: inline;
         position: absolute;
         right: 24px;
+        cursor: pointer;
       }
     }
   }
@@ -143,6 +129,22 @@ const ToDo = styled.div`
       : checkedItems.includes(id) && !isDarkTheme
       ? "#D1D2DA"
       : ""};
+`;
+
+const ItemCheckBox = styled(CheckBox)`
+  position: relative;
+
+  background: ${({ checkedItems, id }) =>
+    checkedItems.includes(id)
+      ? "linear-gradient(135deg, #55ddff 0%, #c058f3 100%)"
+      : ""};
+
+  :hover {
+    background-image: linear-gradient(
+      ${({ checkedItems, id }) =>
+        checkedItems.includes(id) ? "135deg, #55ddff 0%, #c058f3 100%" : ""}
+    );
+  }
 `;
 
 const RemoveButton = styled.img`
