@@ -5,7 +5,7 @@ import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
 import { updateItemStatus, deleteItem, deleteCompletedItems } from "../api/api";
 
-function ToDoList({ isDarkTheme, apiData, setActiveItems, setDeleted }) {
+function ToDoList({ isDarkTheme, apiData, setActiveItems, setDeletedItem }) {
   const [checkedItems, setCheckedItems] = useState([]);
 
   const handleData = (todo) => {
@@ -52,10 +52,10 @@ function ToDoList({ isDarkTheme, apiData, setActiveItems, setDeleted }) {
 
               <RemoveButton
                 src={crossIcon}
-                onClick={() => {
-                  // deleteItem(todo._id, setDeleted);
-                  setDeleted((arr) => [...arr, todo._id]);
-                }}
+                onClick={
+                  () => deleteItem(todo._id, setDeletedItem)
+                  // setDeletedItem((arr) => [...arr, todo._id])
+                }
               />
             </ToDo>
 

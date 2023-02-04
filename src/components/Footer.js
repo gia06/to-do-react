@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { deleteCompletedItems } from "../api/api";
 
 function Footer({ isDarkTheme, setFilter, activeItems }) {
   const [childNum, setChildNum] = useState(1);
@@ -60,6 +61,7 @@ function Footer({ isDarkTheme, setFilter, activeItems }) {
           {innerItems}
         </InnerItemsDesk>
 
+        {/* // TODO should add clear functionality */}
         <FooterItem isDarkTheme={isDarkTheme} onClick={() => setChildNum(1)}>
           Clear Completed
         </FooterItem>

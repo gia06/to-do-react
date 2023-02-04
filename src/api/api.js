@@ -26,12 +26,12 @@ export const updateItemStatus = async (id, handleCheck) => {
   }
 };
 
-export const deleteItem = async (id) => {
+export const deleteItem = async (id, setDeletedItem) => {
   try {
     await axios.delete(`${api}/delete-toDo`, { data: { id } });
-    // setDeleted((arr) => [...arr, id]);
+    setDeletedItem((arr) => [...arr, id]);
   } catch (error) {
-    console.log(error);
+    alert("Deleting item failed, please try again");
   }
 };
 
