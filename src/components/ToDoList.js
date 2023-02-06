@@ -3,14 +3,27 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "./ToDoInput";
 import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
-import { updateItemStatus, deleteItem, deleteCompletedItems } from "../api/api";
+import { updateItemStatus, deleteItem } from "../api/api";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-function ToDoList({ isDarkTheme, apiData, setActiveItems, setTriggerDelete }) {
-  const [checkedItems, setCheckedItems] = useState([]);
-
-  const handleData = (todo) => {
-    checkedItems.push(todo._id);
+function ToDoList({
+  isDarkTheme,
+  apiData,
+  setItemsLeft,
+  setTriggerDelete,
+  filter,
+  checkedItems,
+  setCheckedItems,
+}) {
+  const getLocalData = () => {
+    try {
+      return JSON.parse(localStorage.getItem("localData"));
+    } catch (error) {
+      return [];
+    }
   };
+  // const [checkedItems, setCheckedItems] = useState([]);
+  const [localData, setLocalData] = useState(getLocalData);
 
   const handleCheck = (id) => {
     const status = checkedItems.includes(id);
@@ -21,49 +34,107 @@ function ToDoList({ isDarkTheme, apiData, setActiveItems, setTriggerDelete }) {
       : setCheckedItems([...checkedItems, id]);
   };
 
-  useEffect(() => {
+  const handleFilter = (apiData, filterValue, checkedItems, setItemsLeft) => {
+    const filteredData =
+      filterValue === "all"
+        ? apiData
+        : apiData.filter((todo) => todo.itemStatus === filterValue);
+
+    localStorage.setItem("localData", JSON.stringify(filteredData));
+    // setLocalData(filteredData);
+    console.log("localstorage updated");
     apiData?.map((todo) =>
-      todo.itemStatus === "completed"
-        ? handleData(todo)
-        : setActiveItems((num) => num + 1)
+      todo.itemStatus === "completed" ? checkedItems.push(todo._id) : null
     );
+  };
+
+  const handleLeftItems = (apiData) => {
+    apiData?.map((todo) =>
+      todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
+    );
+  };
+
+  const handleOnDragEnd = (result) => {
+    const items = Array.from(localData);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setLocalData(items);
+    // localStorage.setIteam("localData", JSON.stringify(items));
+  };
+
+  useEffect(() => {
+    localStorage.setItem("localData", JSON.stringify(localData));
+    console.log("setting local data");
+  }, localData);
+
+  useEffect(() => {
+    handleLeftItems(apiData);
   }, [apiData]);
 
+  useEffect(() => {
+    handleFilter(apiData, filter, checkedItems, setItemsLeft);
+    console.log("should re render");
+    // handleLeftItems(apiData);
+  }, [apiData, filter]);
+
   return (
-    <ItemWrapper isDarkTheme={isDarkTheme}>
-      {apiData?.map((todo) => {
-        return (
-          <Item key={todo._id} isDarkTheme={isDarkTheme}>
-            <ToDo
-              checkedItems={checkedItems}
-              id={todo._id}
-              isDarkTheme={isDarkTheme}
-            >
-              <ItemCheckBox
-                onClick={() => updateItemStatus(todo._id, handleCheck)}
-                checkedItems={checkedItems}
-                isDarkTheme={isDarkTheme}
-                id={todo._id}
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <Droppable droppableId="characters">
+        {(provided) => (
+          <ItemWrapper
+            isDarkTheme={isDarkTheme}
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
+            {localData?.map((todo, index) => (
+              <Draggable
+                key={todo._id}
+                draggableId={todo.toDoItem + todo._id}
+                index={index}
               >
-                <img src={checkedItems.includes(todo._id) ? checkIcon : ""} />
-              </ItemCheckBox>
+                {(provided) => (
+                  <Item
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                    isDarkTheme={isDarkTheme}
+                  >
+                    <ToDo
+                      checkedItems={checkedItems}
+                      id={todo._id}
+                      isDarkTheme={isDarkTheme}
+                    >
+                      <ItemCheckBox
+                        onClick={() => updateItemStatus(todo._id, handleCheck)}
+                        checkedItems={checkedItems}
+                        isDarkTheme={isDarkTheme}
+                        id={todo._id}
+                      >
+                        <img
+                          src={checkedItems.includes(todo._id) ? checkIcon : ""}
+                        />
+                      </ItemCheckBox>
 
-              <p>{todo.toDoItem}</p>
+                      <p>{todo.toDoItem}</p>
 
-              <RemoveButton
-                src={crossIcon}
-                onClick={
-                  () => deleteItem(todo._id, setTriggerDelete)
-                  // setDeletedItem((arr) => [...arr, todo._id])
-                }
-              />
-            </ToDo>
+                      <RemoveButton
+                        src={crossIcon}
+                        onClick={() => deleteItem(todo._id, setTriggerDelete)}
+                      />
+                    </ToDo>
 
-            <LineBetween isDarkTheme={isDarkTheme} />
-          </Item>
-        );
-      })}
-    </ItemWrapper>
+                    <LineBetween isDarkTheme={isDarkTheme} />
+                  </Item>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </ItemWrapper>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
 

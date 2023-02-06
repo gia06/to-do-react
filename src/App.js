@@ -19,19 +19,25 @@ function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(getTheme);
   const [apiData, setApiData] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [activeItems, setActiveItems] = useState(0);
+  const [itemsLeft, setItemsLeft] = useState(0);
   const [triggerDelete, setTriggerDelete] = useState("");
-  const [testState, setTestState] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
 
-  // const [activeItems, setActiveItems] = useState(0);
-
-  // useEffect(() => {
-  //   console.log(deletedItem);
-  // }, [deletedItem]);
+  const handleLeftItems = (apiData) => {
+    apiData?.map((todo) =>
+      todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
+    );
+  };
 
   useEffect(() => {
-    fetchData(filter, setApiData);
-  }, [filter, triggerDelete]);
+    // handleLeftItems(apiData);
+    // return setItemsLeft(0);
+  }, [apiData]);
+
+  useEffect(() => {
+    fetchData(setApiData, setItemsLeft);
+    console.log("fetching...");
+  }, [checkedItems, triggerDelete, filter]);
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify({ isDarkTheme }));
@@ -46,13 +52,15 @@ function App() {
         <ToDoList
           isDarkTheme={isDarkTheme}
           apiData={apiData}
-          setActiveItems={setActiveItems}
-          setFilter={setFilter}
+          setItemsLeft={setItemsLeft}
           setTriggerDelete={setTriggerDelete}
+          filter={filter}
+          checkedItems={checkedItems}
+          setCheckedItems={setCheckedItems}
         />
         <Footer
           isDarkTheme={isDarkTheme}
-          activeItems={activeItems}
+          itemsLeft={itemsLeft}
           setFilter={setFilter}
           setTriggerDelete={setTriggerDelete}
         />

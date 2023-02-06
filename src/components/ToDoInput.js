@@ -2,22 +2,25 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import checkIcon from "../assets/icon-check.svg";
+import { createToDo } from "../api/api";
 
 function ToDoInput({ isDarkTheme }) {
   const [inputValue, setInputValue] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
-  const createToDo = async () => {
-    const i = await axios.post("http://localhost:3001/create-toDo", {
-      toDoItem: inputValue,
-      itemStatus: isChecked ? "completed" : "active",
-    });
-    setInputValue("");
-    console.log(i);
-  };
+  // const createToDo = async () => {
+  //   const i = await axios.post("http://localhost:3001/create-toDo", {
+  //     toDoItem: inputValue,
+  //     itemStatus: isChecked ? "completed" : "active",
+  //   });
+  //   setInputValue("");
+  //   console.log(i);
+  // };
 
   return (
-    <InputWrapper onSubmit={createToDo}>
+    <InputWrapper
+      onSubmit={() => createToDo(inputValue, isChecked, setInputValue)}
+    >
       <CheckBox
         type="checkbox"
         onClick={() => setIsChecked(!isChecked)}

@@ -2,23 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { deleteCompletedItems } from "../api/api";
 
-function Footer({ isDarkTheme, setFilter, activeItems, setTriggerDelete }) {
+function Footer({ isDarkTheme, setFilter, itemsLeft, setTriggerDelete }) {
   const [childNum, setChildNum] = useState(1);
-  const [itemsLeft, setItemsLeft] = useState("");
-
-  // * left items
-  // const handleLeftItems = () => {
-  //   let completed = 0;
-  //   let active = 0;
-
-  //   if (props.apiData) {
-  //     props.apiData.map((todo) =>
-  //       todo.itemStatus === "active" ? active++ : completed++
-  //     );
-  //   }
-  //   console.log(completed, active);
-  //   setItemsLeft(props.apiData.length - completed);
-  // };
 
   const handleClick = (filterValue, childValue) => {
     setChildNum(childValue);
@@ -54,14 +39,13 @@ function Footer({ isDarkTheme, setFilter, activeItems, setTriggerDelete }) {
     <>
       <ItemsWrapper isDarkTheme={isDarkTheme}>
         <FooterItem isDarkTheme={isDarkTheme}>
-          {activeItems / 2} items left
+          {itemsLeft} items left
         </FooterItem>
 
         <InnerItemsDesk isDarkTheme={isDarkTheme} childNum={childNum}>
           {innerItems}
         </InnerItemsDesk>
 
-        {/* // TODO should add clear functionality */}
         <FooterItem
           isDarkTheme={isDarkTheme}
           onClick={() => deleteCompletedItems(setTriggerDelete)}
@@ -73,6 +57,10 @@ function Footer({ isDarkTheme, setFilter, activeItems, setTriggerDelete }) {
       <InnerItemsMob isDarkTheme={isDarkTheme} childNum={childNum}>
         {innerItems}
       </InnerItemsMob>
+
+      <DragAndDropText isDarkTheme={isDarkTheme}>
+        Drag and drop to reorder list
+      </DragAndDropText>
     </>
   );
 }
@@ -143,5 +131,14 @@ const InnerItemsMob = styled(InnerItemsDesk)`
   @media (max-width: 670px) {
     display: flex;
     }
+  }
+`;
+
+const DragAndDropText = styled.p`
+  color: ${({ isDarkTheme }) => (isDarkTheme ? "#5B5E7E" : "#9495A5")};
+  margin-top: 49px;
+
+  @media (max-width: 670px) {
+    margin-top: 40px;
   }
 `;
