@@ -1,18 +1,25 @@
 import axios from "axios";
 
-const api = process.env.REACT_APP_API;
+const api = "http://localhost:3001"; //* process.env.REACT_APP_API;
 
-export const fetchData = async (filterValue, setApiData) => {
+export const fetchData = async (setApiData) => {
   try {
     const response = await (await axios.get(`${api}/toDos`)).data;
-    const filteredData =
-      filterValue === "all"
-        ? response.data
-        : response.data.filter((todo) => todo.itemStatus === filterValue);
-
-    setApiData(filteredData);
+    setApiData(response.data);
   } catch (error) {
-    alert("Something went wrong, please try again");
+    alert("Data fetch failed, please try again");
+  }
+};
+
+export const createToDo = async (inputValue, isChecked, setInputValue) => {
+  try {
+    await axios.post(`${api}/create-toDo`, {
+      toDoItem: inputValue,
+      itemStatus: isChecked ? "completed" : "active",
+    });
+    setInputValue("");
+  } catch (error) {
+    alert("Submitting todo failed, please try again");
   }
 };
 
