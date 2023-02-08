@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const api = process.env.REACT_APP_API;
-//
 
 export const fetchData = async (setApiData) => {
   try {
