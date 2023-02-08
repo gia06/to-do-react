@@ -32,20 +32,38 @@ export const updateItemStatus = async (id, handleCheck) => {
   }
 };
 
-export const deleteItem = async (id, setTriggerDelete) => {
+export const deleteItem = async (id, setLocalData) => {
   try {
     await axios.delete(`${api}/delete-toDo`, { data: { id } });
-    setTriggerDelete("single-delete");
+    setLocalData((preVal) => preVal.filter((todo) => todo._id !== id));
   } catch (error) {
     alert("Deleting item failed, please try again");
   }
 };
 
-export const deleteCompletedItems = async (setTriggerDelete) => {
+export const deleteCompletedItems = async (setLocalData) => {
   try {
     await axios.delete(`${api}/delete-completed`);
-    setTriggerDelete("clear-completed-delete");
+    setLocalData((preVal) =>
+      preVal.filter((todo) => todo.itemStatus !== "completed")
+    );
   } catch (error) {
     alert("Deleting items failed, please try again");
+  }
+};
+
+export const getTheme = () => {
+  try {
+    return JSON.parse(localStorage.getItem("theme")).isDarkTheme;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const getLocalData = () => {
+  try {
+    return JSON.parse(localStorage.getItem("localData"));
+  } catch (error) {
+    return [];
   }
 };

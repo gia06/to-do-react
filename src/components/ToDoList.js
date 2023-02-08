@@ -1,30 +1,21 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { CheckBox } from "./ToDoInput";
 import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
-import { updateItemStatus, deleteItem } from "../api/api";
+import { updateItemStatus, deleteItem } from "../data/dataHandler";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function ToDoList({
   isDarkTheme,
   apiData,
   setItemsLeft,
-  setTriggerDelete,
   filter,
   checkedItems,
   setCheckedItems,
+  localData,
+  setLocalData,
 }) {
-  const getLocalData = () => {
-    try {
-      return JSON.parse(localStorage.getItem("localData"));
-    } catch (error) {
-      return [];
-    }
-  };
-  // const [checkedItems, setCheckedItems] = useState([]);
-  const [localData, setLocalData] = useState(getLocalData);
-
   const handleCheck = (id) => {
     const status = checkedItems.includes(id);
     const unChecked = checkedItems.filter((storedId) => storedId !== id);
@@ -34,54 +25,47 @@ function ToDoList({
       : setCheckedItems([...checkedItems, id]);
   };
 
-  const handleFilter = (apiData, filterValue, checkedItems, setItemsLeft) => {
+  const handleFilter = (apiData, filterValue, checkedItems) => {
     const filteredData =
       filterValue === "all"
         ? apiData
         : apiData.filter((todo) => todo.itemStatus === filterValue);
 
-    localStorage.setItem("localData", JSON.stringify(filteredData));
-    // setLocalData(filteredData);
-    console.log("localstorage updated");
+    setLocalData(filteredData);
     apiData?.map((todo) =>
       todo.itemStatus === "completed" ? checkedItems.push(todo._id) : null
     );
   };
 
-  const handleLeftItems = (apiData) => {
-    apiData?.map((todo) =>
+  const handleLeftItems = (apiData, localData) => {
+    setItemsLeft(0);
+    localData?.map((todo) =>
       todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
     );
   };
 
   const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
     const items = Array.from(localData);
     const [reorderedItem] = items.splice(result.source.index, 1);
 
     items.splice(result.destination.index, 0, reorderedItem);
-
     setLocalData(items);
-    // localStorage.setIteam("localData", JSON.stringify(items));
   };
 
   useEffect(() => {
     localStorage.setItem("localData", JSON.stringify(localData));
-    console.log("setting local data");
-  }, localData);
+    handleLeftItems(apiData, localData);
+  }, [localData]);
 
   useEffect(() => {
-    handleLeftItems(apiData);
-  }, [apiData]);
-
-  useEffect(() => {
-    handleFilter(apiData, filter, checkedItems, setItemsLeft);
+    handleFilter(apiData, filter, checkedItems);
     console.log("should re render");
-    // handleLeftItems(apiData);
   }, [apiData, filter]);
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable droppableId="characters">
+      <Droppable droppableId="to-dos">
         {(provided) => (
           <ItemWrapper
             isDarkTheme={isDarkTheme}
@@ -121,7 +105,7 @@ function ToDoList({
 
                       <RemoveButton
                         src={crossIcon}
-                        onClick={() => deleteItem(todo._id, setTriggerDelete)}
+                        onClick={() => deleteItem(todo._id, setLocalData)}
                       />
                     </ToDo>
 
