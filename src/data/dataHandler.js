@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = "http://localhost:3001"; //* process.env.REACT_APP_API;
+const api = process.env.REACT_APP_API;
 
 export const fetchData = async (setApiData) => {
   try {
