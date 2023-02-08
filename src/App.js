@@ -8,20 +8,10 @@ import Footer from "./components/Footer";
 import { fetchData, getTheme, getLocalData } from "./data/dataHandler";
 
 function App() {
-  // const getTheme = () => {
-  //   try {
-  //     return JSON.parse(localStorage.getItem("theme")).isDarkTheme;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
-
   const [isDarkTheme, setIsDarkTheme] = useState(getTheme);
   const [apiData, setApiData] = useState([]);
   const [filter, setFilter] = useState("all");
   const [itemsLeft, setItemsLeft] = useState(0);
-  // TODO: remove this state from every component when done
-  const [triggerDelete, setTriggerDelete] = useState("");
   const [checkedItems, setCheckedItems] = useState([]);
   const [localData, setLocalData] = useState(getLocalData);
 
@@ -44,7 +34,6 @@ function App() {
           isDarkTheme={isDarkTheme}
           apiData={apiData}
           setItemsLeft={setItemsLeft}
-          setTriggerDelete={setTriggerDelete}
           filter={filter}
           checkedItems={checkedItems}
           setCheckedItems={setCheckedItems}
@@ -55,7 +44,6 @@ function App() {
           isDarkTheme={isDarkTheme}
           itemsLeft={itemsLeft}
           setFilter={setFilter}
-          setTriggerDelete={setTriggerDelete}
           setLocalData={setLocalData}
         />
       </Main>
