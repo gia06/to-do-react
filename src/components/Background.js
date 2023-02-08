@@ -8,6 +8,8 @@ function Background({ isDarkTheme }) {
   return <BackgroundImg isDarkTheme={isDarkTheme} />;
 }
 
+export default Background;
+
 const BackgroundImg = styled.div`
   width: 100vw;
   height: 300px;
@@ -23,5 +25,3 @@ const BackgroundImg = styled.div`
     height: 200px;
   }
 `;
-
-export default Background;

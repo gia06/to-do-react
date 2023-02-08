@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "./ToDoInput";
 import checkIcon from "../assets/icon-check.svg";
 import crossIcon from "../assets/icon-cross.svg";
-import { updateItemStatus, deleteItem } from "../api/api";
+import {
+  updateItemStatus,
+  deleteItem,
+  getLocalData,
+} from "../data/dataHandler";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function ToDoList({
@@ -14,16 +18,20 @@ function ToDoList({
   filter,
   checkedItems,
   setCheckedItems,
+  localData,
+  setLocalData,
 }) {
-  const getLocalData = () => {
-    try {
-      return JSON.parse(localStorage.getItem("localData"));
-    } catch (error) {
-      return [];
-    }
-  };
+  // const getLocalData = () => {
+  //   try {
+  //     return JSON.parse(localStorage.getItem("localData"));
+  //   } catch (error) {
+  //     console.log("error getting localstorage");
+  //     return [];
+  //   }
+  // };
+
   // const [checkedItems, setCheckedItems] = useState([]);
-  const [localData, setLocalData] = useState(getLocalData);
+  // const [localData, setLocalData] = useState(getLocalData);
 
   const handleCheck = (id) => {
     const status = checkedItems.includes(id);
@@ -40,21 +48,24 @@ function ToDoList({
         ? apiData
         : apiData.filter((todo) => todo.itemStatus === filterValue);
 
-    localStorage.setItem("localData", JSON.stringify(filteredData));
-    // setLocalData(filteredData);
-    console.log("localstorage updated");
+    setLocalData(filteredData);
+    // localStorage.setItem("localData", JSON.stringify(filteredData));
+    // console.log("localstorage updated");
     apiData?.map((todo) =>
       todo.itemStatus === "completed" ? checkedItems.push(todo._id) : null
     );
   };
 
   const handleLeftItems = (apiData) => {
+    console.log("triggered left items func");
+    setItemsLeft(0);
     apiData?.map((todo) =>
       todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
     );
   };
 
   const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
     const items = Array.from(localData);
     const [reorderedItem] = items.splice(result.source.index, 1);
 
@@ -67,16 +78,15 @@ function ToDoList({
   useEffect(() => {
     localStorage.setItem("localData", JSON.stringify(localData));
     console.log("setting local data");
-  }, localData);
+  }, [localData]);
 
   useEffect(() => {
     handleLeftItems(apiData);
-  }, [apiData]);
+  }, [localData]);
 
   useEffect(() => {
     handleFilter(apiData, filter, checkedItems, setItemsLeft);
     console.log("should re render");
-    // handleLeftItems(apiData);
   }, [apiData, filter]);
 
   return (
@@ -121,7 +131,9 @@ function ToDoList({
 
                       <RemoveButton
                         src={crossIcon}
-                        onClick={() => deleteItem(todo._id, setTriggerDelete)}
+                        onClick={() =>
+                          deleteItem(todo._id, setTriggerDelete, setLocalData)
+                        }
                       />
                     </ToDo>
 

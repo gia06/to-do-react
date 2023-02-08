@@ -5,39 +5,30 @@ import Header from "./components/Header";
 import ToDoInput from "./components/ToDoInput";
 import ToDoList from "./components/ToDoList";
 import Footer from "./components/Footer";
-import { fetchData } from "./api/api";
+import { fetchData, getTheme, getLocalData } from "./data/dataHandler";
 
 function App() {
-  const getTheme = () => {
-    try {
-      return JSON.parse(localStorage.getItem("theme")).isDarkTheme;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const getTheme = () => {
+  //   try {
+  //     return JSON.parse(localStorage.getItem("theme")).isDarkTheme;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const [isDarkTheme, setIsDarkTheme] = useState(getTheme);
   const [apiData, setApiData] = useState([]);
   const [filter, setFilter] = useState("all");
   const [itemsLeft, setItemsLeft] = useState(0);
+  // TODO: remove this state from every component when done
   const [triggerDelete, setTriggerDelete] = useState("");
   const [checkedItems, setCheckedItems] = useState([]);
-
-  const handleLeftItems = (apiData) => {
-    apiData?.map((todo) =>
-      todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
-    );
-  };
-
-  useEffect(() => {
-    // handleLeftItems(apiData);
-    // return setItemsLeft(0);
-  }, [apiData]);
+  const [localData, setLocalData] = useState(getLocalData);
 
   useEffect(() => {
     fetchData(setApiData, setItemsLeft);
     console.log("fetching...");
-  }, [checkedItems, triggerDelete, filter]);
+  }, [checkedItems, filter]);
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify({ isDarkTheme }));
@@ -57,12 +48,15 @@ function App() {
           filter={filter}
           checkedItems={checkedItems}
           setCheckedItems={setCheckedItems}
+          localData={localData}
+          setLocalData={setLocalData}
         />
         <Footer
           isDarkTheme={isDarkTheme}
           itemsLeft={itemsLeft}
           setFilter={setFilter}
           setTriggerDelete={setTriggerDelete}
+          setLocalData={setLocalData}
         />
       </Main>
     </AppWrapper>

@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { deleteCompletedItems } from "../api/api";
+import { deleteCompletedItems } from "../data/dataHandler";
 
-function Footer({ isDarkTheme, setFilter, itemsLeft, setTriggerDelete }) {
+function Footer({
+  isDarkTheme,
+  setFilter,
+  itemsLeft,
+  setTriggerDelete,
+  setLocalData,
+}) {
   const [childNum, setChildNum] = useState(1);
 
   const handleClick = (filterValue, childValue) => {
@@ -48,7 +54,7 @@ function Footer({ isDarkTheme, setFilter, itemsLeft, setTriggerDelete }) {
 
         <FooterItem
           isDarkTheme={isDarkTheme}
-          onClick={() => deleteCompletedItems(setTriggerDelete)}
+          onClick={() => deleteCompletedItems(setTriggerDelete, setLocalData)}
         >
           Clear Completed
         </FooterItem>
