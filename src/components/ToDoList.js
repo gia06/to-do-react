@@ -37,7 +37,7 @@ function ToDoList({
     );
   };
 
-  const handleLeftItems = (apiData, localData) => {
+  const handleLeftItems = (localData) => {
     setItemsLeft(0);
     localData?.map((todo) =>
       todo.itemStatus === "active" ? setItemsLeft((val) => val + 1) : null
@@ -55,7 +55,7 @@ function ToDoList({
 
   useEffect(() => {
     localStorage.setItem("localData", JSON.stringify(localData));
-    handleLeftItems(apiData, localData);
+    handleLeftItems(localData);
   }, [localData]);
 
   useEffect(() => {
