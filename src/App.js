@@ -17,7 +17,6 @@ function App() {
 
   useEffect(() => {
     fetchData(setApiData, setItemsLeft);
-    console.log("fetching...");
   }, [checkedItems, filter]);
 
   useEffect(() => {

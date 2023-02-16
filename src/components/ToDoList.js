@@ -60,7 +60,6 @@ function ToDoList({
 
   useEffect(() => {
     handleFilter(apiData, filter, checkedItems);
-    console.log("should re render");
   }, [apiData, filter]);
 
   return (
